@@ -1,0 +1,4 @@
+language: ruby
+cache: bundler
+
+# bundle install and rake run automatically by Travis.
