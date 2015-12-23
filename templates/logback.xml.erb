@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file><%= @log_file %></file>
     <encoder>
       <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
@@ -16,10 +16,10 @@
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
       <maxFileSize>10MB</maxFileSize>
     </triggeringPolicy>
-	</appender>
+  </appender>
 
-	<root level="<%= @log_level %>">
-		<appender-ref ref="FILE" />
-	</root>
+  <root level="<%= @log_level %>">
+    <appender-ref ref="FILE" />
+  </root>
 
 </configuration>
