@@ -71,7 +71,7 @@ class marathon::config(
           notify  => Service['marathon'],
         }
 
-        $java_extra_opts = "-Dlogback.configurationFile=file:$log_config_file"
+        $java_extra_opts = "-Dlogback.configurationFile=file:${log_config_file}"
       }
       default: {
         fail("Logger \"${logger}\" is not currently supported. Only logback is supported at this time.")
