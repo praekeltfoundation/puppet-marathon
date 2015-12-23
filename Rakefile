@@ -1,11 +1,9 @@
+require 'puppet-lint/tasks/puppet-lint'
 require 'rspec-puppet/rake_task'
 
-begin
-  if Gem::Specification::find_by_name('puppet-lint')
-    require 'puppet-lint/tasks/puppet-lint'
-    PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
-    task :default => [:rspec, :lint]
-  end
-rescue Gem::LoadError
-  task :default => :rspec
+Rake::Task[:lint].clear
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp", "modules/**/*.pp"]
 end
+
+task :default => [:spec, :lint]
