@@ -1,3 +1,4 @@
-/modules/
-
 Gemfile.lock
+.tmp/
+modules/
+.librarian/
