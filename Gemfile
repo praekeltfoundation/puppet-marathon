@@ -6,5 +6,5 @@ group :test do
   gem 'puppet-lint'
   gem 'rake'
   gem 'rspec-puppet'
-  gem 'r10k'
+  gem 'librarian-puppet'
 end
