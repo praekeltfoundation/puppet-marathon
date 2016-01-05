@@ -5,6 +5,11 @@
 # [*ensure*]
 #   The ensure value for the Marathon package.
 #
+# [*manage_repo*]
+#   Whether or not to manage the repo for installing Marathon. This module
+#   simply reuses mesos::repo so if that class is defined elsewhere then this
+#   parameter should be set to false.
+#
 # [*repo*]
 #   The repository to use. Currently supported values: undef/blank,
 #   'mesosphere'.
@@ -57,6 +62,7 @@
 #   Whether or not to manage the state of the Marathon service with Puppet.
 class marathon(
   $ensure         = 'present',
+  $manage_repo    = true,
   $repo           = undef,
 
   $owner          = 'root',
@@ -86,12 +92,15 @@ class marathon(
 
   class { 'marathon::install':
     ensure      => $ensure,
+    manage_repo => $manage_repo,
     repo_source => $repo,
   }
 
   class { 'marathon::config':
     owner         => $owner,
     group         => $group,
+    master        => $master,
+    zookeeper     => $zookeeper,
     options       => $options,
     env_var       => $env_var,
     manage_logger => $manage_logger,

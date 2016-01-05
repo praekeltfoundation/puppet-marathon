@@ -27,19 +27,19 @@ class marathon::config(
 
   if $master {
     mesos::property { 'marathon_master':
-      $value   = $master,
-      $dir     = $conf_dir,
-      $service = Service['marathon'],
-      $file    = 'master',
+      value   => $master,
+      dir     => $conf_dir,
+      service => Service['marathon'],
+      file    => 'master',
     }
   }
 
   if $zookeeper {
     mesos::property { 'marathon_zk':
-      $value   = $zookeeper,
-      $dir     = $conf_dir,
-      $service = Service['marathon'],
-      $file    = 'zk',
+      value   => $zookeeper,
+      dir     => $conf_dir,
+      service => Service['marathon'],
+      file    => 'zk',
     }
   }
 
@@ -64,7 +64,7 @@ class marathon::config(
         $log_file = "${log_dir}/${log_filename}"
         $log_archive_pattern = "${log_dir}/${log_filename}.%i.gz"
         file { $log_config_file:
-          source  => template('marathon/logback.xml.erb')
+          content => template('marathon/logback.xml.erb'),
           owner   => $owner,
           group   => $group,
           require => File[$conf_dir_base],
