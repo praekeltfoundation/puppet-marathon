@@ -27,19 +27,19 @@ class marathon::config(
 
   if $master {
     mesos::property { 'marathon_master':
-      $value   = $master,
-      $dir     = $conf_dir,
-      $service = Service['marathon'],
-      $file    = 'master',
+      value   => $master,
+      dir     => $conf_dir,
+      service => Service['marathon'],
+      file    => 'master',
     }
   }
 
   if $zookeeper {
     mesos::property { 'marathon_zk':
-      $value   = $zookeeper,
-      $dir     = $conf_dir,
-      $service = Service['marathon'],
-      $file    = 'zk',
+      value   => $zookeeper,
+      dir     => $conf_dir,
+      service => Service['marathon'],
+      file    => 'zk',
     }
   }
 
