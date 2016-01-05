@@ -92,6 +92,8 @@ class marathon(
   class { 'marathon::config':
     owner         => $owner,
     group         => $group,
+    master        => $master,
+    zookeeper     => $zookeeper,
     options       => $options,
     env_var       => $env_var,
     manage_logger => $manage_logger,
