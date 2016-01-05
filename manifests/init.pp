@@ -74,7 +74,7 @@ class marathon(
   $ulimit         = undef,
 
   $manage_service = true,
-) inherits marathon::params {
+) {
 
   validate_bool($manage_logger)
   validate_hash($options)
