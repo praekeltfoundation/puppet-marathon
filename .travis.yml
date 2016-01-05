@@ -1,0 +1,8 @@
+language: ruby
+cache: bundler
+
+env:
+  - PUPPET_VERSION="3.4.3"    # Version installed on Trusty
+  - PUPPET_VERSION="~> 3.8.0" # Latest version
+
+# bundle install and rake run automatically by Travis.
