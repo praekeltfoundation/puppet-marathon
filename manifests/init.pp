@@ -79,7 +79,7 @@ class marathon(
   validate_bool($manage_logger)
   validate_hash($options)
   validate_hash($env_var)
-  if defined ($ulimit) {
+  if $ulimit != undef {
     validate_integer($ulimit)
   }
   validate_bool($manage_service)
