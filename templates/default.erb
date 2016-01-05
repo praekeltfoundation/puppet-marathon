@@ -1,0 +1,19 @@
+# This file is managed by Puppet
+
+<%- if !@ulimit.nil? && @ulimit > 0 -%>
+# Set the ulimit. Note that if Marathon is run as root via the
+# marathon-framework script (i.e. the usual way), it will set the ulimit to 8192
+# if it is lower than that.
+ulimit -n <%= @ulimit %>
+<%- end -%>
+
+<%- if !@java_home.nil? && !@java_home.empty? -%>
+JAVA_HOME="<%= @java_home %>"
+<%- end -%>
+
+# JVM options
+JAVA_OPTS="<%= @java_opts %> <%= @java_extra_opts %>"
+
+<% @env_var.sort.each do |key,val| -%>
+export <%= key %>="<%= val %>"
+<% end if @env_var -%>

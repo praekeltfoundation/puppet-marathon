@@ -1,0 +1,39 @@
+{
+  "name": "praekeltfoundation-marathon",
+  "version": "0.1.0",
+  "author": "Jamie Hewland",
+  "summary": "Module that manages the Marathon framework for Mesos",
+  "license": "BSD",
+  "source": "http://github.com/praekeltfoundation/puppet-marathon",
+  "project_page": "https://github.com/praekeltfoundation/puppet-marathon",
+  "issues_url": "https://github.com/praekeltfoundation/puppet-marathon/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.2.0"
+    },
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 2.1.0"
+    },
+    {
+      "name": "deric/mesos",
+      "version_requirement": ">= 0.6.4"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">=3.4.0 < 4.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04"
+      ]
+    }
+  ]
+}
