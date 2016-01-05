@@ -64,7 +64,7 @@ class marathon::config(
         $log_file = "${log_dir}/${log_filename}"
         $log_archive_pattern = "${log_dir}/${log_filename}.%i.gz"
         file { $log_config_file:
-          source  => template('marathon/logback.xml.erb')
+          source  => template('marathon/logback.xml.erb'),
           owner   => $owner,
           group   => $group,
           require => File[$conf_dir_base],
