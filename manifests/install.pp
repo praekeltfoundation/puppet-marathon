@@ -5,8 +5,12 @@ class marathon::install(
   $repo_source = undef,
 ) {
   # Just use the Mesos repo class for now (it only has the mesosphere repo).
-  class { 'mesos::repo':
-    source => $repo_source,
+  # Don't include if $repo_source is undef or blank so that the class can be
+  # excluded if it is defined elsewhere.
+  if ($repo_source != undef) and ($repo_source != '') {
+    class { 'mesos::repo':
+      source => $repo_source,
+    }
   }
 
   package { 'marathon':
