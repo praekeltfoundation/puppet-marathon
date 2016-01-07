@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "author": "Jamie Hewland",
   "summary": "Module that manages the Marathon framework for Mesos",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "source": "http://github.com/praekeltfoundation/puppet-marathon",
   "project_page": "https://github.com/praekeltfoundation/puppet-marathon",
   "issues_url": "https://github.com/praekeltfoundation/puppet-marathon/issues",
