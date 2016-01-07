@@ -28,6 +28,7 @@ Rake::Task[:coverage].clear
 Rake::Task[:validate].clear
 Rake::Task[:metadata].clear
 
+desc "Run syntax, lint, metadata and spec tests."
 task :test => [
   :syntax,
   :lint,
