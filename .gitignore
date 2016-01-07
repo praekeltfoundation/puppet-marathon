@@ -7,7 +7,10 @@ Gemfile.lock
 /.librarian/
 /.tmp/
 /modules/
+
+# Fixture modules loaded by librarian-puppet
 /spec/fixtures/modules/
+!/spec/fixtures/modules/marathon
 
 # Puppet
 /pkg/
