@@ -1,4 +1,5 @@
 require 'puppetlabs_spec_helper/rake_tasks'
+require 'metadata-json-lint/rake_task'
 
 task :librarian_spec_prep do
   sh 'librarian-puppet install --path=spec/fixtures/modules/'
@@ -23,6 +24,6 @@ end
 task :test => [
   :syntax,
   :lint,
-  :metadata,
+  :metadata_lint,
   :spec,
 ]
