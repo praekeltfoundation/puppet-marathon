@@ -23,5 +23,6 @@ end
 task :test => [
   :syntax,
   :lint,
+  :metadata,
   :spec,
 ]

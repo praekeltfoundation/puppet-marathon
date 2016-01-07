@@ -7,5 +7,6 @@ group :test do
   gem 'puppet', puppetversion
 
   gem 'librarian-puppet'
+  gem 'metadata-json-lint'
   gem 'puppetlabs_spec_helper'
 end
