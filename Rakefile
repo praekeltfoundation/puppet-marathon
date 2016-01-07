@@ -20,6 +20,9 @@ PuppetLint::RakeTask.new(:lint) do |config|
   config.ignore_paths = ["vendor/**/*.pp", "spec/**/*.pp", "modules/**/*.pp"]
 end
 
+# Coverage from puppetlabs-spec-helper requires rcov which doesn't work in
+# anything since Ruby 1.8.7
+Rake::Task[:coverage].clear
 
 task :test => [
   :syntax,
