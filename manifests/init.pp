@@ -60,6 +60,10 @@
 #
 # [*manage_service*]
 #   Whether or not to manage the state of the Marathon service with Puppet.
+#
+# [*service*]
+#   Service to notify when there is a config change. If manage_service is true
+#   then this should not be set.
 class marathon(
   $ensure         = 'present',
   $manage_repo    = true,
@@ -80,6 +84,7 @@ class marathon(
   $ulimit         = undef,
 
   $manage_service = true,
+  $service        = undef,
 ) {
 
   validate_bool($manage_logger)
@@ -96,7 +101,15 @@ class marathon(
     repo_source => $repo,
   }
 
+  if $manage_service {
+    include marathon::service
+    $notify_service = Service['marathon']
+  } else {
+    $notify_service = $service
+  }
+
   class { 'marathon::config':
+    service       => $notify_service,
     owner         => $owner,
     group         => $group,
     master        => $master,
@@ -110,9 +123,5 @@ class marathon(
     java_home     => $java_home,
     java_opts     => $java_opts,
     ulimit        => $ulimit,
-  }
-
-  if ($manage_service) {
-    include marathon::service
   }
 }
