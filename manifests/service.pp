@@ -1,13 +1,15 @@
 # == Class: marathon::service
 #
 class marathon::service (
+  $manage = true,
   $ensure = 'running',
 ) {
-  service { 'marathon':
-    ensure     => $ensure,
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
-    subscribe  => File['/etc/default/marathon'],
+  if $manage {
+    service { 'marathon':
+      ensure     => $ensure,
+      enable     => true,
+      hasrestart => true,
+      hasstatus  => true,
+    }
   }
 }

@@ -3,7 +3,6 @@
 class marathon::config(
   $conf_dir_base = '/etc/marathon',
   $conf_dir_name = 'conf',
-  $service       = undef,
   $owner         = 'root',
   $group         = 'root',
   $master        = undef,
@@ -28,27 +27,24 @@ class marathon::config(
 
   if $master {
     mesos::property { 'marathon_master':
-      value   => $master,
-      dir     => $conf_dir,
-      service => $service,
-      file    => 'master',
+      value => $master,
+      dir   => $conf_dir,
+      file  => 'master',
     }
   }
 
   if $zookeeper {
     mesos::property { 'marathon_zk':
-      value   => $zookeeper,
-      dir     => $conf_dir,
-      service => $service,
-      file    => 'zk',
+      value => $zookeeper,
+      dir   => $conf_dir,
+      file  => 'zk',
     }
   }
 
   create_resources(mesos::property,
     mesos_hash_parser($options, 'marathon'),
     {
-      dir     => $conf_dir,
-      service => $service
+      dir => $conf_dir,
     }
   )
 
@@ -69,7 +65,6 @@ class marathon::config(
           owner   => $owner,
           group   => $group,
           require => File[$conf_dir_base],
-          notify  => $service,
         }
 
         $java_extra_opts = "-Dlogback.configurationFile=file:${log_config_file}"

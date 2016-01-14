@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe 'marathon' do
+describe 'marathon::service' do
   it { should compile }
 end
