@@ -2,17 +2,16 @@
 #
 # === Parameters
 #
-# [*ensure*]
-#   The ensure value for the Marathon package.
-#
-# [*manage_repo*]
+# [*repo_manage*]
 #   Whether or not to manage the repo for installing Marathon. This module
 #   simply reuses mesos::repo so if that class is defined elsewhere then this
 #   parameter should be set to false.
 #
-# [*repo*]
-#   The repository to use. Currently supported values: undef/blank,
-#   'mesosphere'.
+# [*repo_source*]
+#   The repository to use. Currently supported values: 'mesosphere'.
+#
+# [*package_ensure*]
+#   The ensure value for the Marathon package.
 #
 # [*owner*]
 #   The owner of the configuration files.
@@ -58,16 +57,16 @@
 #   root it will (in most circumstances) set the ulimit to 8192 if it is lower
 #   than that.
 #
-# [*manage_service*]
+# [*service_manage*]
 #   Whether or not to manage the state of the Marathon service with Puppet.
 #
-# [*service*]
-#   Service to notify when there is a config change. If manage_service is true
-#   then this should not be set.
+# [*service_ensure*]
+#   What state the service should be kept in - e.g. 'running'
 class marathon(
-  $ensure         = 'present',
-  $manage_repo    = true,
-  $repo           = undef,
+  $repo_manage    = true,
+  $repo_source    = 'mesosphere',
+
+  $package_ensure = 'present',
 
   $owner          = 'root',
   $group          = 'root',
@@ -83,33 +82,29 @@ class marathon(
   $java_opts      = '-Xmx512m',
   $ulimit         = undef,
 
-  $manage_service = true,
-  $service        = undef,
+  $service_manage = true,
+  $service_ensure = 'running'
 ) {
 
+  validate_bool($repo_manage)
   validate_bool($manage_logger)
   validate_hash($options)
   validate_hash($env_var)
   if $ulimit != undef {
     validate_integer($ulimit)
   }
-  validate_bool($manage_service)
+  validate_bool($service_manage)
 
-  class { 'marathon::install':
-    ensure      => $ensure,
-    manage_repo => $manage_repo,
-    repo_source => $repo,
+  class { 'marathon::repo':
+    manage => $repo_manage,
+    source => $repo_source,
   }
 
-  if $manage_service {
-    include marathon::service
-    $notify_service = Service['marathon']
-  } else {
-    $notify_service = $service
+  class { 'marathon::install':
+    ensure => $package_ensure,
   }
 
   class { 'marathon::config':
-    service       => $notify_service,
     owner         => $owner,
     group         => $group,
     master        => $master,
@@ -124,4 +119,16 @@ class marathon(
     java_opts     => $java_opts,
     ulimit        => $ulimit,
   }
+
+  class { 'marathon::service':
+    ensure => $service_ensure,
+    manage => $service_manage,
+  }
+
+  anchor { 'marathon::begin': }
+    -> Class['marathon::repo']
+    -> Class['marathon::install']
+    -> Class['marathon::config']
+    ~> Class['marathon::service']
+    -> anchor { 'marathon::end': }
 }
