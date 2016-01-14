@@ -7,6 +7,7 @@ Gemfile.lock
 /.librarian/
 /.tmp/
 /modules/
+Puppetfile.lock
 
 # Fixture modules loaded by librarian-puppet
 /spec/fixtures/modules/
