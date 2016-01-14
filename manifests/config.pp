@@ -27,24 +27,27 @@ class marathon::config(
 
   if $master {
     mesos::property { 'marathon_master':
-      value => $master,
-      dir   => $conf_dir,
-      file  => 'master',
+      value   => $master,
+      dir     => $conf_dir,
+      file    => 'master',
+      service => undef,
     }
   }
 
   if $zookeeper {
     mesos::property { 'marathon_zk':
-      value => $zookeeper,
-      dir   => $conf_dir,
-      file  => 'zk',
+      value   => $zookeeper,
+      dir     => $conf_dir,
+      file    => 'zk',
+      service => undef,
     }
   }
 
   create_resources(mesos::property,
     mesos_hash_parser($options, 'marathon'),
     {
-      dir => $conf_dir,
+      dir     => $conf_dir,
+      service => undef,
     }
   )
 
