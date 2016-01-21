@@ -3,7 +3,11 @@ A Puppet module for configuring Marathon
 
 This module was designed for Marathon version 0.13.0+. Older versions should still work but may require some extra configuration.
 
-This module has been tested on Puppet 3.4 and 3.8 running on Ubuntu 14.04. Again, this should work on other setups but we make no promises.
+This module has been tested on:
+ - Ubuntu 14.04 running Puppet 3.4 and 3.8
+ - RHEL 7 running Puppet 3.7
+
+Again, this should work on other setups but we make no promises.
 
 ## Getting started
 The module should be immediately familiar to anybody who has used the [`deric/mesos`](https://github.com/deric/puppet-mesos) module.
