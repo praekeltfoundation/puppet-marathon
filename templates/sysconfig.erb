@@ -1,0 +1,11 @@
+# This file is managed by Puppet
+
+<%- if !@java_home.nil? && !@java_home.empty? -%>
+JAVA_HOME=<%= @java_home %>
+<%- end -%>
+
+JAVA_OPTS=<%= @java_opts %> <%= @java_extra_opts %>
+
+<% @env_var.sort.each do |key,val| -%>
+<%= key %>=<%= val %>
+<% end if @env_var -%>

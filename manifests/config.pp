@@ -7,8 +7,8 @@ class marathon::config(
   $group         = 'root',
   $master        = undef,
   $zookeeper     = undef,
-  $options       = {},
-  $env_var       = {},
+  $options       = { },
+  $env_var       = { },
   $manage_logger = true,
   $logger        = 'logback',
   $log_dir       = '/var/log/marathon',
@@ -78,11 +78,49 @@ class marathon::config(
     }
   }
 
-  file { '/etc/default/marathon':
-    ensure  => 'present',
-    content => template('marathon/default.erb'),
-    owner   => $owner,
-    group   => $group,
-    mode    => '0644',
+  case $::osfamily {
+    'Debian': {
+      file { '/etc/default/marathon':
+        ensure  => 'present',
+        content => template('marathon/default.erb'),
+        owner   => $owner,
+        group   => $group,
+        mode    => '0644',
+      }
+    }
+    'RedHat': {
+      $ensure_service_file = $ulimit ? {
+        undef => 'absent',
+        default => 'present'
+      }
+
+      # this file overwrites config, make sure it is gone for good
+      file { '/etc/default/marathon':
+        ensure => 'absent',
+      }
+
+      file { '/etc/sysconfig/marathon':
+        ensure  => 'present',
+        content => template('marathon/sysconfig.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+      }
+
+      file { '/etc/systemd/system/marathon.service':
+        ensure  => $ensure_service_file,
+        content => template('marathon/marathon.service.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        notify  => Exec['systemctl-daemon-reload_marathon'],
+      }
+
+      exec { 'systemctl-daemon-reload_marathon':
+        command     => '/usr/bin/systemctl daemon-reload',
+        refreshonly => true,
+      }
+    }
+    default: { fail("Unsupported OS family: ${::osfamily}") }
   }
 }
