@@ -1,6 +1,6 @@
 {
   "name": "praekeltfoundation-marathon",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Jamie Hewland",
   "summary": "Module that manages the Marathon framework for Mesos",
   "license": "BSD-3-Clause",
