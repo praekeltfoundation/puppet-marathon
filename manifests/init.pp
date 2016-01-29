@@ -57,33 +57,48 @@
 #   root it will (in most circumstances) set the ulimit to 8192 if it is lower
 #   than that.
 #
+# [*mesos_auth_principal*]
+#   Principal for authentification at mesos master. If this parameter is not set
+#   then the Mesos authentication secret will not be managed.
+#
+# [*mesos_auth_secret*]
+#   Secret for authentification at mesos master. If this parameter is not set
+#   then the Mesos authentication secret will not be managed.
+#
+# [*mesos_auth_secret_file*]
+#   Location for storing the secret. If the principal or secret are not provided
+#   then this file will not be managed.
+#
 # [*service_manage*]
 #   Whether or not to manage the state of the Marathon service with Puppet.
 #
 # [*service_ensure*]
 #   What state the service should be kept in - e.g. 'running'
 class marathon(
-  $repo_manage    = true,
-  $repo_source    = 'mesosphere',
+  $repo_manage            = true,
+  $repo_source            = 'mesosphere',
 
-  $package_ensure = 'present',
+  $package_ensure         = 'present',
 
-  $owner          = 'root',
-  $group          = 'root',
-  $master         = undef,
-  $zookeeper      = undef,
-  $options        = {},
-  $env_var        = {},
-  $manage_logger  = true,
-  $logger         = 'logback',
-  $log_dir        = '/var/log/marathon',
-  $log_filename   = 'marathon.log',
-  $java_home      = undef,
-  $java_opts      = '-Xmx512m',
-  $ulimit         = undef,
+  $owner                  = 'root',
+  $group                  = 'root',
+  $master                 = undef,
+  $zookeeper              = undef,
+  $options                = {},
+  $env_var                = {},
+  $manage_logger          = true,
+  $logger                 = 'logback',
+  $log_dir                = '/var/log/marathon',
+  $log_filename           = 'marathon.log',
+  $java_home              = undef,
+  $java_opts              = '-Xmx512m',
+  $ulimit                 = undef,
+  $mesos_auth_principal   = undef,
+  $mesos_auth_secret      = undef,
+  $mesos_auth_secret_file = '/etc/marathon/.secret',
 
-  $service_manage = true,
-  $service_ensure = 'running'
+  $service_manage         = true,
+  $service_ensure         = 'running'
 ) {
 
   validate_bool($repo_manage)
@@ -105,19 +120,22 @@ class marathon(
   }
 
   class { 'marathon::config':
-    owner         => $owner,
-    group         => $group,
-    master        => $master,
-    zookeeper     => $zookeeper,
-    options       => $options,
-    env_var       => $env_var,
-    manage_logger => $manage_logger,
-    logger        => $logger,
-    log_dir       => $log_dir,
-    log_filename  => $log_filename,
-    java_home     => $java_home,
-    java_opts     => $java_opts,
-    ulimit        => $ulimit,
+    owner                  => $owner,
+    group                  => $group,
+    master                 => $master,
+    zookeeper              => $zookeeper,
+    options                => $options,
+    env_var                => $env_var,
+    manage_logger          => $manage_logger,
+    logger                 => $logger,
+    log_dir                => $log_dir,
+    log_filename           => $log_filename,
+    java_home              => $java_home,
+    java_opts              => $java_opts,
+    ulimit                 => $ulimit,
+    mesos_auth_principal   => $mesos_auth_principal,
+    mesos_auth_secret      => $mesos_auth_secret,
+    mesos_auth_secret_file => $mesos_auth_secret_file,
   }
 
   class { 'marathon::service':

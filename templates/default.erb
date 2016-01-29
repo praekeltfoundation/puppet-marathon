@@ -1,6 +1,6 @@
 # This file is managed by Puppet
 
-<%- if !@ulimit.nil? && @ulimit > 0 -%>
+<%- if !@ulimit.nil? && @ulimit.to_i > 0 -%>
 # Set the ulimit. Note that if Marathon is run as root via the
 # marathon-framework script (i.e. the usual way), it will set the ulimit to 8192
 # if it is lower than that.

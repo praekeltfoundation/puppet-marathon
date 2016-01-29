@@ -1,6 +1,6 @@
 {
   "name": "praekeltfoundation-marathon",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Jamie Hewland",
   "summary": "Module that manages the Marathon framework for Mesos",
   "license": "BSD-3-Clause",
@@ -18,7 +18,7 @@
     },
     {
       "name": "deric/mesos",
-      "version_requirement": ">= 0.6.4"
+      "version_requirement": ">= 0.6.5"
     }
   ],
   "requirements": [
@@ -33,6 +33,18 @@
       "operatingsystemrelease": [
         "12.04",
         "14.04"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
       ]
     }
   ]

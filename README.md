@@ -3,7 +3,11 @@ A Puppet module for configuring Marathon
 
 This module was designed for Marathon version 0.13.0+. Older versions should still work but may require some extra configuration.
 
-This module has been tested on Puppet 3.4 and 3.8 running on Ubuntu 14.04. Again, this should work on other setups but we make no promises.
+This module has been tested on:
+ - Ubuntu 14.04 running Puppet 3.4 and 3.8
+ - RHEL 7 running Puppet 3.7
+
+Again, this should work on other setups but we make no promises.
 
 ## Getting started
 The module should be immediately familiar to anybody who has used the [`deric/mesos`](https://github.com/deric/puppet-mesos) module.
@@ -34,16 +38,16 @@ class { 'mesos':
 }
 
 class { 'marathon':
-  manage_repo => false,
+  repo_manage => false,
   zookeeper   => $marathon_zk,
   master      => $mesos_zk,
 }
 
-Apt::Source['mesosphere'] -> Package['marathon']
+Class['mesos::repo'] -> Package['marathon']
 ```
 
 Two things to note:
- 1. The `manage_repo => false` line ensures that the Marathon module doesn't try to configure a repo that conflicts with the Mesos one.
+ 1. The `repo_manage => false` line ensures that the Marathon module doesn't try to configure a repo that conflicts with the Mesos one.
  2. We must specify the repo dependency for the Marathon package as there is no way for the Marathon module to know this dependency if it is not managing the repo itself.
 
 

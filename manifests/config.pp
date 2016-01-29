@@ -1,28 +1,51 @@
 # == Class: marathon::config
 #
 class marathon::config(
-  $conf_dir_base = '/etc/marathon',
-  $conf_dir_name = 'conf',
-  $owner         = 'root',
-  $group         = 'root',
-  $master        = undef,
-  $zookeeper     = undef,
-  $options       = {},
-  $env_var       = {},
-  $manage_logger = true,
-  $logger        = 'logback',
-  $log_dir       = '/var/log/marathon',
-  $log_filename  = 'marathon.log',
-  $log_level     = 'info',
-  $ulimit        = undef,
-  $java_home     = undef,
-  $java_opts     = '-Xmx512m',
+  $conf_dir_base          = '/etc/marathon',
+  $conf_dir_name          = 'conf',
+  $owner                  = 'root',
+  $group                  = 'root',
+  $master                 = undef,
+  $zookeeper              = undef,
+  $options                = { },
+  $env_var                = { },
+  $manage_logger          = true,
+  $logger                 = 'logback',
+  $log_dir                = '/var/log/marathon',
+  $log_filename           = 'marathon.log',
+  $log_level              = 'info',
+  $ulimit                 = undef,
+  $mesos_auth_principal   = undef,
+  $mesos_auth_secret      = undef,
+  $mesos_auth_secret_file = '/etc/marathon/.secret',
+  $java_home              = undef,
+  $java_opts              = '-Xmx512m',
 ) {
   $conf_dir = "${conf_dir_base}/${conf_dir_name}"
   file { [$conf_dir_base, $conf_dir]:
     ensure => directory,
     owner  => $owner,
     group  => $group,
+  }
+
+  if ($mesos_auth_principal != undef and $mesos_auth_secret != undef) {
+    validate_absolute_path($mesos_auth_secret_file)
+    file { $mesos_auth_secret_file:
+      ensure  => file,
+      content => $mesos_auth_secret,
+      owner   => $owner,
+      group   => $group,
+      mode    => '0400',
+    }
+
+    $secret_options = {
+      'mesos_authentication_principal'   => $mesos_auth_principal,
+      'mesos_authentication_secret_file' => $mesos_auth_secret_file,
+    }
+
+    $real_options = merge($options, $secret_options)
+  } else {
+    $real_options = $options
   }
 
   if $master {
@@ -44,7 +67,7 @@ class marathon::config(
   }
 
   create_resources(mesos::property,
-    mesos_hash_parser($options, 'marathon'),
+    mesos_hash_parser($real_options, 'marathon'),
     {
       dir     => $conf_dir,
       service => undef,
@@ -78,11 +101,49 @@ class marathon::config(
     }
   }
 
-  file { '/etc/default/marathon':
-    ensure  => 'present',
-    content => template('marathon/default.erb'),
-    owner   => $owner,
-    group   => $group,
-    mode    => '0644',
+  case $::osfamily {
+    'Debian': {
+      file { '/etc/default/marathon':
+        ensure  => 'present',
+        content => template('marathon/default.erb'),
+        owner   => $owner,
+        group   => $group,
+        mode    => '0644',
+      }
+    }
+    'RedHat': {
+      $ensure_service_file = $ulimit ? {
+        undef => 'absent',
+        default => 'present'
+      }
+
+      # this file overwrites config, make sure it is gone for good
+      file { '/etc/default/marathon':
+        ensure => 'absent',
+      }
+
+      file { '/etc/sysconfig/marathon':
+        ensure  => 'present',
+        content => template('marathon/sysconfig.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+      }
+
+      file { '/etc/systemd/system/marathon.service':
+        ensure  => $ensure_service_file,
+        content => template('marathon/marathon.service.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        notify  => Exec['systemctl-daemon-reload_marathon'],
+      }
+
+      exec { 'systemctl-daemon-reload_marathon':
+        command     => '/usr/bin/systemctl daemon-reload',
+        refreshonly => true,
+      }
+    }
+    default: { fail("Unsupported OS family: ${::osfamily}") }
   }
 }
