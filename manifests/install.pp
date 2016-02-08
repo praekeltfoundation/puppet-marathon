@@ -4,6 +4,6 @@ class marathon::install(
   $ensure = 'installed',
 ) {
   package { 'marathon':
-    ensure  => $ensure,
+    ensure => $ensure,
   }
 }

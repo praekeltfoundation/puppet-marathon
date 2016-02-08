@@ -149,4 +149,6 @@ class marathon(
     -> Class['marathon::config']
     ~> Class['marathon::service']
     -> anchor { 'marathon::end': }
+
+  Package['marathon'] ~> Class['marathon::service']
 }
