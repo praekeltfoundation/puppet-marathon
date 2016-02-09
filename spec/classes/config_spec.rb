@@ -138,6 +138,8 @@ describe 'marathon::config' do
       context 'with lots of custom params' do
 
         let(:params) { {
+            :owner => 'marathon-user',
+            :group => 'marathon-group',
             :master => 'zk://foo:2181/mesos',
             :zookeeper => 'zk://foo:2181/marathon',
             :options => {
@@ -158,12 +160,20 @@ describe 'marathon::config' do
         it 'stores some config in /etc/marathon/conf' do
           should contain_mesos__property('marathon_master')
                      .with_value('zk://foo:2181/mesos')
+                     .with_owner('marathon-user')
+                     .with_group('marathon-group')
           should contain_mesos__property('marathon_zk')
                      .with_value('zk://foo:2181/marathon')
+                     .with_owner('marathon-user')
+                     .with_group('marathon-group')
           should contain_mesos__property('marathon_some_options')
                      .with_value('with-value')
+                     .with_owner('marathon-user')
+                     .with_group('marathon-group')
           should contain_mesos__property('marathon_some_other_options')
                      .with_value('with-other-value')
+                     .with_owner('marathon-user')
+                     .with_group('marathon-group')
         end
 
         case facts[:osfamily]
