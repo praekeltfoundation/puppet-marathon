@@ -9,6 +9,7 @@ class marathon::config(
   $zookeeper              = undef,
   $options                = { },
   $env_var                = { },
+  $syslog                 = true,
   $manage_logger          = true,
   $logger                 = 'logback',
   $log_dir                = '/var/log/marathon',
@@ -73,6 +74,20 @@ class marathon::config(
       service => undef,
     }
   )
+
+  # The "--no-logger" flag that disables syslog output is used by Marathon's
+  # startup script, not Marathon itself, and so does not behave quite like other
+  # configuration options. Using a mesos::property would result in a "--logger"
+  # flag when syslog is true, which in this case is not a valid flag.
+  $no_logger_ensure = $syslog ? {
+    true  => absent,
+    false => present,
+  }
+  file { "${conf_dir}/?no-logger":
+    ensure => $no_logger_ensure,
+    owner  => $owner,
+    group  => $group,
+  }
 
   if $manage_logger {
     file { $log_dir:
