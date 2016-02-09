@@ -55,6 +55,8 @@ class marathon::config(
       dir     => $conf_dir,
       file    => 'master',
       service => undef,
+      owner   => $owner,
+      group   => $group,
     }
   }
 
@@ -64,6 +66,8 @@ class marathon::config(
       dir     => $conf_dir,
       file    => 'zk',
       service => undef,
+      owner   => $owner,
+      group   => $group,
     }
   }
 
@@ -72,6 +76,8 @@ class marathon::config(
     {
       dir     => $conf_dir,
       service => undef,
+      owner   => $owner,
+      group   => $group,
     }
   )
 
