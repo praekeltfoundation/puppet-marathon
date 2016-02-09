@@ -75,9 +75,10 @@ class marathon::config(
     }
   )
 
-  # The --no-logger flag that disables syslog output must either be present or
-  # not at all (there is no --logger) flag. This means a mesos::property can't
-  # be used.
+  # The "--no-logger" flag that disables syslog output is used by Marathon's
+  # startup script, not Marathon itself, and so does not behave quite like other
+  # configuration options. Using a mesos::property would result in a "--logger"
+  # flag when syslog is true, which in this case is not a valid flag.
   $no_logger_ensure = $syslog ? {
     true  => absent,
     false => present,
