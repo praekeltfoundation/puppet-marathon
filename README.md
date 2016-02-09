@@ -1,4 +1,9 @@
 # puppet-marathon
+
+[![Puppet
+Forge](http://img.shields.io/puppetforge/v/praekeltfoundation/marathon.svg)](https://forge.puppetlabs.com/praekeltfoundation/marathon)
+[![Build Status](https://travis-ci.org/praekeltfoundation/puppet-marathon.svg?branch=develop)](https://travis-ci.org/praekeltfoundation/puppet-marathon)
+
 A Puppet module for configuring Marathon
 
 This module was designed for Marathon version 0.13.0+. Older versions should still work but may require some extra configuration.

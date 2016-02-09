@@ -8,6 +8,10 @@ describe 'marathon' do
       end
 
       it { should compile }
+
+      it 'should restart the service when upgrading the package' do
+        should contain_package('marathon').with_notify('Class[Marathon::Service]')
+      end
     end
   end
 end

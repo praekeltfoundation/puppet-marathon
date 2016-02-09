@@ -1,3 +1,13 @@
+## 0.4.0 - 2016/02/09
+### Features
+* Ability to disable Marathon's syslog logging (#16)
+
+### Changes
+* Marathon service now restarted when package is changed (#15 - @felixb)
+
+### Fixes
+* Owner and group set for `mesos::property` config resources (#17)
+
 ## 0.3.0 - 2016/01/29
 ### Features
 * CentOS/RHEL 7 support (#12 - @felixb)
