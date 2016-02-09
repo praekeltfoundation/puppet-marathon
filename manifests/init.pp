@@ -33,6 +33,10 @@
 # [*env_var*]
 #   A hash of environment variables to export before starting Marathon.
 #
+# [*syslog*]
+#   Whether Marathon should log to syslog. This flag can be used independently
+#   of manage_logger. Marathon will log to syslog by default.
+#
 # [*manage_logger*]
 #   Whether or not to configure the logger for Marathon.
 #
@@ -86,6 +90,7 @@ class marathon(
   $zookeeper              = undef,
   $options                = {},
   $env_var                = {},
+  $syslog                 = true,
   $manage_logger          = true,
   $logger                 = 'logback',
   $log_dir                = '/var/log/marathon',
@@ -126,6 +131,7 @@ class marathon(
     zookeeper              => $zookeeper,
     options                => $options,
     env_var                => $env_var,
+    syslog                 => $syslog,
     manage_logger          => $manage_logger,
     logger                 => $logger,
     log_dir                => $log_dir,
