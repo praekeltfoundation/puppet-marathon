@@ -1,5 +1,8 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'metadata-json-lint/rake_task'
+require 'rubocop/rake_task'
+
+RuboCop::RakeTask.new
 
 task :librarian_spec_prep do
   sh 'librarian-puppet install --path=spec/fixtures/modules/'
@@ -33,5 +36,6 @@ task :test => [
   :syntax,
   :lint,
   :metadata_lint,
+  :rubocop,
   :spec,
 ]
