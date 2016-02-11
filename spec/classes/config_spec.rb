@@ -235,6 +235,34 @@ describe 'marathon::config' do
           end
         end
       end
+
+      context 'master and zookeeper parameters' do
+        describe 'when master is set' do
+          let(:params) { {:master => '127.0.0.1'} }
+          it do
+            is_expected.to contain_mesos__property('marathon_master')
+              .with_value('127.0.0.1')
+          end
+        end
+
+        describe 'when master is not set' do
+          let(:params) { {:master => :undef} }
+          it { is_expected.not_to contain_mesos__property('marathon_master') }
+        end
+
+        describe 'when zookeeper is set' do
+          let(:params) { {:zookeeper => 'zk://127.0.0.1:2181/marathon'} }
+          it do
+            is_expected.to contain_mesos__property('marathon_zk')
+              .with_value('zk://127.0.0.1:2181/marathon')
+          end
+        end
+
+        describe 'when zookeeper is not set' do
+          let(:params) { {:zookeeper => :undef} }
+          it { is_expected.not_to contain_mesos__property('marathon_zk') }
+        end
+      end
     end
   end
 end
