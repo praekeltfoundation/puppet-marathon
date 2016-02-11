@@ -1,3 +1,10 @@
+## 0.4.1 - 2016/02/11
+### Features
+* Puppet 4.x support (#18)
+
+### Fixes
+* Better tests (#9, #19)
+
 ## 0.4.0 - 2016/02/09
 ### Features
 * Ability to disable Marathon's syslog logging (#16)
