@@ -63,7 +63,7 @@ describe 'marathon' do
 
       it 'should restart the service when upgrading the package' do
         is_expected.to contain_package('marathon')
-          .with_notify('Class[Marathon::Service]')
+          .that_notifies('Class[Marathon::Service]')
       end
     end
   end
