@@ -140,11 +140,6 @@ describe 'marathon::config' do
               .with_ensure('absent')
             is_expected.to contain_exec('systemctl-daemon-reload_marathon')
           end
-
-        else
-          it 'is an unsupported OS' do
-            fail("#{facts[:osfamily]} is unsupported")
-          end
         end
       end
 
@@ -227,11 +222,6 @@ describe 'marathon::config' do
             is_expected.to contain_file('/etc/systemd/system/marathon.service')
               .with_content(/^LimitNOFILE=9001$/)
             is_expected.to contain_exec('systemctl-daemon-reload_marathon')
-          end
-
-        else
-          it 'is an unsupported OS' do
-            fail("#{facts[:osfamily]} is unsupported")
           end
         end
       end
