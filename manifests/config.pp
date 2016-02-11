@@ -117,7 +117,7 @@ class marathon::config(
         $java_extra_opts = "-Dlogback.configurationFile=file:${log_config_file}"
       }
       default: {
-        fail("Logger \"${logger}\" is not currently supported. Only logback is supported at this time.")
+        fail("Logger \"${logger}\" is not currently supported. Only logback is supported at this time.") # lint:ignore:80chars
       }
     }
   }
