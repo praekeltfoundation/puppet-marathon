@@ -11,9 +11,7 @@ describe 'marathon::config' do
 
       context 'secrets' do
         context 'w/o secret' do
-          let(:params) { {
-              :options => {}
-          } }
+          let(:params) { { :options => {} } }
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
@@ -23,14 +21,16 @@ describe 'marathon::config' do
         end
 
         context 'at default location' do
-          let(:params) { {
+          let(:params) do
+            {
               :mesos_auth_principal => 'marathon',
               :mesos_auth_secret => 'very-secret',
               :options => {
-                  'mesos_authentication_principal' => 'not-marathon',
-                  'mesos_authentication_secret_file' => '/root/.secret',
+                'mesos_authentication_principal' => 'not-marathon',
+                'mesos_authentication_secret_file' => '/root/.secret',
               }
-          } }
+            }
+          end
 
           it 'stores secret in specified file' do
             is_expected.to contain_file('/etc/marathon/.secret')
@@ -41,9 +41,7 @@ describe 'marathon::config' do
         end
 
         context 'at default location, w/o principal set' do
-          let(:params) { {
-              :mesos_auth_secret => 'very-secret',
-          } }
+          let(:params) { { :mesos_auth_secret => 'very-secret', } }
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
@@ -53,9 +51,7 @@ describe 'marathon::config' do
         end
 
         context 'at default location, w/o secret set' do
-          let(:params) { {
-              :mesos_auth_principal => 'marathon',
-          } }
+          let(:params) { { :mesos_auth_principal => 'marathon', } }
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
@@ -65,11 +61,13 @@ describe 'marathon::config' do
         end
 
         context 'at specific location from params' do
-          let(:params) { {
+          let(:params) do
+            {
               :mesos_auth_principal => 'marathon',
               :mesos_auth_secret => 'very-secret',
               :mesos_auth_secret_file => '/root/.marathon_secret',
-          } }
+            }
+          end
 
           it 'stores secret in specified file' do
             is_expected.to contain_file('/root/.marathon_secret')
@@ -136,24 +134,25 @@ describe 'marathon::config' do
       end
 
       context 'with lots of custom params' do
-
-        let(:params) { {
+        let(:params) do
+          {
             :owner => 'marathon-user',
             :group => 'marathon-group',
             :master => 'zk://foo:2181/mesos',
             :zookeeper => 'zk://foo:2181/marathon',
             :options => {
-                'some_options' => 'with-value',
-                'some_other_options' => 'with-other-value',
+              'some_options' => 'with-value',
+              'some_other_options' => 'with-other-value',
             },
             :env_var => {
-                'foo' => 'bar',
-                'f00' => 'b4r',
+              'foo' => 'bar',
+              'f00' => 'b4r',
             },
             :java_home => '/opt/some/java/home',
             :java_opts => '-Xmx1024m',
             :ulimit => 9001,
-        } }
+          }
+        end
 
         it { is_expected.to compile }
 
