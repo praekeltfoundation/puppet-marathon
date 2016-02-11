@@ -10,7 +10,8 @@ describe 'marathon' do
       it { should compile }
 
       it 'should restart the service when upgrading the package' do
-        should contain_package('marathon').with_notify('Class[Marathon::Service]')
+        is_expected.to contain_package('marathon')
+          .with_notify('Class[Marathon::Service]')
       end
     end
   end

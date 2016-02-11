@@ -1,5 +1,8 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'metadata-json-lint/rake_task'
+require 'rubocop/rake_task'
+
+RuboCop::RakeTask.new
 
 task :librarian_spec_prep do
   sh 'librarian-puppet install --path=spec/fixtures/modules/'
@@ -12,12 +15,12 @@ task :spec_prep => :librarian_spec_prep
 Rake::Task[:lint].clear
 PuppetLint::RakeTask.new(:lint) do |config|
   config.fail_on_warnings = true
-  config.disable_checks = [
-      '80chars',
-      'class_inherits_from_params_class',
-      'autoloader_layout',
+  config.ignore_paths = [
+    'modules/**/*.pp',
+    'pkg/**/*.pp',
+    'spec/**/*.pp',
+    'vendor/**/*.pp',
   ]
-  config.ignore_paths = ["vendor/**/*.pp", "spec/**/*.pp", "modules/**/*.pp"]
 end
 
 # Coverage from puppetlabs_spec_helper requires rcov which doesn't work in
@@ -28,10 +31,11 @@ Rake::Task[:coverage].clear
 Rake::Task[:validate].clear
 Rake::Task[:metadata].clear
 
-desc "Run syntax, lint, metadata and spec tests."
+desc 'Run syntax, lint, metadata and spec tests.'
 task :test => [
   :syntax,
   :lint,
   :metadata_lint,
+  :rubocop,
   :spec,
 ]
