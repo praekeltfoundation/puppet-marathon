@@ -16,10 +16,10 @@ Rake::Task[:lint].clear
 PuppetLint::RakeTask.new(:lint) do |config|
   config.fail_on_warnings = true
   config.ignore_paths = [
-    "modules/**/*.pp",
-    "pkg/**/*.pp",
-    "spec/**/*.pp",
-    "vendor/**/*.pp",
+    'modules/**/*.pp',
+    'pkg/**/*.pp',
+    'spec/**/*.pp',
+    'vendor/**/*.pp',
   ]
 end
 
@@ -31,7 +31,7 @@ Rake::Task[:coverage].clear
 Rake::Task[:validate].clear
 Rake::Task[:metadata].clear
 
-desc "Run syntax, lint, metadata and spec tests."
+desc 'Run syntax, lint, metadata and spec tests.'
 task :test => [
   :syntax,
   :lint,
