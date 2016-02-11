@@ -15,3 +15,6 @@ Style/RegexpLiteral:
 
 Style/TrailingCommaInLiteral:
   Enabled: false
+
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space

@@ -11,7 +11,7 @@ describe 'marathon::config' do
 
       context 'secrets' do
         context 'w/o secret' do
-          let(:params) { { :options => {} } }
+          let(:params) { {:options => {}} }
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
@@ -47,7 +47,7 @@ describe 'marathon::config' do
         end
 
         context 'at default location, w/o principal set' do
-          let(:params) { { :mesos_auth_secret => 'very-secret', } }
+          let(:params) { {:mesos_auth_secret => 'very-secret'} }
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
@@ -59,7 +59,7 @@ describe 'marathon::config' do
         end
 
         context 'at default location, w/o secret set' do
-          let(:params) { { :mesos_auth_principal => 'marathon', } }
+          let(:params) { {:mesos_auth_principal => 'marathon'} }
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
@@ -228,7 +228,7 @@ describe 'marathon::config' do
 
       context 'syslog' do
         describe 'when syslog is true' do
-          let(:params) { { :syslog => true } }
+          let(:params) { {:syslog => true} }
           it do
             is_expected.to contain_file('/etc/marathon/conf/?no-logger')
               .with_ensure('absent')
@@ -236,7 +236,7 @@ describe 'marathon::config' do
         end
 
         describe 'when syslog is false' do
-          let(:params) { { :syslog => false } }
+          let(:params) { {:syslog => false} }
           it do
             is_expected.to contain_file('/etc/marathon/conf/?no-logger')
               .with_ensure('present')
