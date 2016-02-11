@@ -240,18 +240,16 @@ describe 'marathon::config' do
         describe 'when syslog is true' do
           let(:params) { { :syslog => true } }
           it do
-            is_expected.to contain_file('/etc/marathon/conf/?no-logger').with({
-              'ensure' => 'absent',
-            })
+            is_expected.to contain_file('/etc/marathon/conf/?no-logger')
+              .with_ensure('absent')
           end
         end
 
         describe 'when syslog is false' do
           let(:params) { { :syslog => false } }
           it do
-            is_expected.to contain_file('/etc/marathon/conf/?no-logger').with({
-              'ensure' => 'present',
-            })
+            is_expected.to contain_file('/etc/marathon/conf/?no-logger')
+              .with_ensure('present')
           end
         end
       end
