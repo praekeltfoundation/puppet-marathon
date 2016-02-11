@@ -15,8 +15,10 @@ describe 'marathon::config' do
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
-            is_expected.not_to contain_mesos__property('marathon_mesos_authentication_principal')
-            is_expected.not_to contain_mesos__property('marathon_mesos_authentication_secret_file')
+            is_expected.not_to contain_mesos__property(
+              'marathon_mesos_authentication_principal')
+            is_expected.not_to contain_mesos__property(
+              'marathon_mesos_authentication_secret_file')
           end
         end
 
@@ -34,9 +36,13 @@ describe 'marathon::config' do
 
           it 'stores secret in specified file' do
             is_expected.to contain_file('/etc/marathon/.secret')
-                       .with_content('very-secret')
-            is_expected.to contain_mesos__property('marathon_mesos_authentication_principal').with_value('marathon')
-            is_expected.to contain_mesos__property('marathon_mesos_authentication_secret_file').with_value('/etc/marathon/.secret')
+              .with_content('very-secret')
+            is_expected.to contain_mesos__property(
+              'marathon_mesos_authentication_principal')
+              .with_value('marathon')
+            is_expected.to contain_mesos__property(
+              'marathon_mesos_authentication_secret_file')
+              .with_value('/etc/marathon/.secret')
           end
         end
 
@@ -45,8 +51,10 @@ describe 'marathon::config' do
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
-            is_expected.not_to contain_mesos__property('marathon_mesos_authentication_principal')
-            is_expected.not_to contain_mesos__property('marathon_mesos_authentication_secret_file')
+            is_expected.not_to contain_mesos__property(
+              'marathon_mesos_authentication_principal')
+            is_expected.not_to contain_mesos__property(
+              'marathon_mesos_authentication_secret_file')
           end
         end
 
@@ -55,8 +63,10 @@ describe 'marathon::config' do
 
           it 'stores secret in specified file' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
-            is_expected.not_to contain_mesos__property('marathon_mesos_authentication_principal')
-            is_expected.not_to contain_mesos__property('marathon_mesos_authentication_secret_file')
+            is_expected.not_to contain_mesos__property(
+              'marathon_mesos_authentication_principal')
+            is_expected.not_to contain_mesos__property(
+              'marathon_mesos_authentication_secret_file')
           end
         end
 
@@ -71,65 +81,70 @@ describe 'marathon::config' do
 
           it 'stores secret in specified file' do
             is_expected.to contain_file('/root/.marathon_secret')
-                       .with_content('very-secret')
-            is_expected.to contain_mesos__property('marathon_mesos_authentication_secret_file').with_value('/root/.marathon_secret')
+              .with_content('very-secret')
+            is_expected.to contain_mesos__property(
+              'marathon_mesos_authentication_secret_file')
+              .with_value('/root/.marathon_secret')
           end
         end
       end
 
       context 'with default params' do
-
         it { is_expected.to compile }
 
         it 'creates conf dir' do
           is_expected.to contain_file('/etc/marathon')
-                     .with_ensure('directory')
+            .with_ensure('directory')
           is_expected.to contain_file('/etc/marathon/conf')
-                     .with_ensure('directory')
+            .with_ensure('directory')
         end
 
         it 'configures logback' do
           is_expected.to contain_file('/var/log/marathon')
-                     .with_ensure('directory')
+            .with_ensure('directory')
           is_expected.to contain_file('/etc/marathon/logback.xml')
-                     .with_content(/<file>\/var\/log\/marathon\/marathon.log<\/file>/)
+            .with_content(/<file>\/var\/log\/marathon\/marathon.log<\/file>/)
         end
 
         case facts[:osfamily]
-          when /Debian/
+        when /Debian/
 
-            it 'writes config to /etc/default/marathon' do
-              is_expected.to contain_file('/etc/default/marathon')
-                         .with_content(/^JAVA_OPTS="-Xmx512m -Dlogback.configurationFile=file:\/etc\/marathon\/logback.xml"$/)
-                         .without_content(/JAVA_HOME/)
-                         .without_content(/ulimit/)
-            end
+          it 'writes config to /etc/default/marathon' do
+            logback_opt =
+              '-Dlogback.configurationFile=file:/etc/marathon/logback.xml'
+            is_expected.to contain_file('/etc/default/marathon')
+              .with_content(/^JAVA_OPTS="-Xmx512m #{logback_opt}"$/)
+              .without_content(/JAVA_HOME/)
+              .without_content(/ulimit/)
+          end
 
-            it 'does not configure systemd' do
-              is_expected.not_to contain_file('/etc/sysconfig/marathon')
-            end
+          it 'does not configure systemd' do
+            is_expected.not_to contain_file('/etc/sysconfig/marathon')
+          end
 
-          when /RedHat/
+        when /RedHat/
 
-            it 'does not configure sysvinit' do
-              is_expected.to contain_file('/etc/default/marathon')
-                         .with_ensure('absent')
-            end
+          it 'does not configure sysvinit' do
+            is_expected.to contain_file('/etc/default/marathon')
+              .with_ensure('absent')
+          end
 
-            it 'configures systemd' do
-              is_expected.to contain_file('/etc/sysconfig/marathon')
-                         .with_content(/^JAVA_OPTS=-Xmx512m -Dlogback.configurationFile=file:\/etc\/marathon\/logback.xml$/)
-                         .without_content(/JAVA_HOME/)
+          it 'configures systemd' do
+            logback_path = '/etc/marathon/logback.xml'
+            logback_opt = "-Dlogback.configurationFile=file:#{logback_path}"
+            is_expected.to contain_file('/etc/sysconfig/marathon')
+              .with_content(/^JAVA_OPTS=-Xmx512m #{logback_opt}$/)
+              .without_content(/JAVA_HOME/)
 
-              is_expected.to contain_file('/etc/systemd/system/marathon.service')
-                         .with_ensure('absent')
-              is_expected.to contain_exec('systemctl-daemon-reload_marathon')
-            end
+            is_expected.to contain_file('/etc/systemd/system/marathon.service')
+              .with_ensure('absent')
+            is_expected.to contain_exec('systemctl-daemon-reload_marathon')
+          end
 
-          else
-            it 'is an unsupported OS' do
-              fail("#{facts[:osfamily]} is unsupported")
-            end
+        else
+          it 'is an unsupported OS' do
+            fail("#{facts[:osfamily]} is unsupported")
+          end
         end
       end
 
@@ -158,62 +173,66 @@ describe 'marathon::config' do
 
         it 'stores some config in /etc/marathon/conf' do
           is_expected.to contain_mesos__property('marathon_master')
-                     .with_value('zk://foo:2181/mesos')
-                     .with_owner('marathon-user')
-                     .with_group('marathon-group')
+            .with_value('zk://foo:2181/mesos')
+            .with_owner('marathon-user')
+            .with_group('marathon-group')
           is_expected.to contain_mesos__property('marathon_zk')
-                     .with_value('zk://foo:2181/marathon')
-                     .with_owner('marathon-user')
-                     .with_group('marathon-group')
+            .with_value('zk://foo:2181/marathon')
+            .with_owner('marathon-user')
+            .with_group('marathon-group')
           is_expected.to contain_mesos__property('marathon_some_options')
-                     .with_value('with-value')
-                     .with_owner('marathon-user')
-                     .with_group('marathon-group')
+            .with_value('with-value')
+            .with_owner('marathon-user')
+            .with_group('marathon-group')
           is_expected.to contain_mesos__property('marathon_some_other_options')
-                     .with_value('with-other-value')
-                     .with_owner('marathon-user')
-                     .with_group('marathon-group')
+            .with_value('with-other-value')
+            .with_owner('marathon-user')
+            .with_group('marathon-group')
         end
 
         case facts[:osfamily]
-          when /Debian/
+        when /Debian/
 
-            it 'writes config to /etc/default/marathon' do
-              is_expected.to contain_file('/etc/default/marathon')
-                         .with_content(/^ulimit -n 9001$/)
-                         .with_content(/^JAVA_OPTS="-Xmx1024m -Dlogback.configurationFile=file:\/etc\/marathon\/logback.xml"$/)
-                         .with_content(/^JAVA_HOME="\/opt\/some\/java\/home"$/)
-                         .with_content(/^export foo="bar"$/)
-                         .with_content(/^export f00="b4r"$/)
-            end
+          it 'writes config to /etc/default/marathon' do
+            logback_opt =
+              '-Dlogback.configurationFile=file:/etc/marathon/logback.xml'
+            is_expected.to contain_file('/etc/default/marathon')
+              .with_content(/^ulimit -n 9001$/)
+              .with_content(/^JAVA_OPTS="-Xmx1024m #{logback_opt}"$/)
+              .with_content(/^JAVA_HOME="\/opt\/some\/java\/home"$/)
+              .with_content(/^export foo="bar"$/)
+              .with_content(/^export f00="b4r"$/)
+          end
 
-            it 'does not configure systemd' do
-              is_expected.not_to contain_file('/etc/sysconfig/marathon')
-            end
+          it 'does not configure systemd' do
+            is_expected.not_to contain_file('/etc/sysconfig/marathon')
+          end
 
-          when /RedHat/
+        when /RedHat/
 
-            it 'does not configure sysvinit' do
-              is_expected.to contain_file('/etc/default/marathon')
-                         .with_ensure('absent')
-            end
+          it 'does not configure sysvinit' do
+            is_expected.to contain_file('/etc/default/marathon')
+              .with_ensure('absent')
+          end
 
-            it 'configures systemd' do
-              is_expected.to contain_file('/etc/sysconfig/marathon')
-                         .with_content(/^JAVA_OPTS=-Xmx1024m -Dlogback.configurationFile=file:\/etc\/marathon\/logback.xml$/)
-                         .with_content(/^JAVA_HOME=\/opt\/some\/java\/home$/)
-                         .with_content(/^foo=bar$/)
-                         .with_content(/^f00=b4r$/)
+          it 'configures systemd' do
+            logback_opt =
+              '-Dlogback.configurationFile=file:/etc/marathon/logback.xml'
+            is_expected.to contain_file('/etc/sysconfig/marathon')
+              .with_content(/^JAVA_OPTS=-Xmx1024m #{logback_opt}$/)
+              .with_content(/^JAVA_HOME=\/opt\/some\/java\/home$/)
+              .with_content(/^foo=bar$/)
+              .with_content(/^f00=b4r$/)
 
-              is_expected.to contain_file('/etc/systemd/system/marathon.service')
-                         .with_content(/^LimitNOFILE=9001$/)
-              is_expected.to contain_exec('systemctl-daemon-reload_marathon')
-            end
+            is_expected.to contain_file('/etc/systemd/system/marathon.service')
+              .with_content(/^LimitNOFILE=9001$/)
+            is_expected.to contain_exec('systemctl-daemon-reload_marathon')
+          end
 
-          else
-            it 'is an unsupported OS' do
-              fail("#{facts[:osfamily]} is unsupported")
-            end
+        else
+          it 'is an unsupported OS' do
+            fail("#{facts[:osfamily]} is unsupported")
+          end
         end
       end
 
