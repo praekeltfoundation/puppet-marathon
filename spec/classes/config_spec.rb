@@ -10,31 +10,15 @@ describe 'marathon::config' do
       it { is_expected.to compile }
 
       context 'secrets' do
-        context 'w/o secret' do
-          let(:params) { {:options => {}} }
-
-          it 'stores secret in specified file' do
-            is_expected.not_to contain_file('/etc/marathon/.secret')
-            is_expected.not_to contain_mesos__property(
-              'marathon_mesos_authentication_principal')
-            is_expected.not_to contain_mesos__property(
-              'marathon_mesos_authentication_secret_file')
-          end
-        end
-
-        context 'at default location' do
+        describe 'when the auth principal and secret are set' do
           let(:params) do
             {
               :mesos_auth_principal => 'marathon',
               :mesos_auth_secret => 'very-secret',
-              :options => {
-                'mesos_authentication_principal' => 'not-marathon',
-                'mesos_authentication_secret_file' => '/root/.secret',
-              }
             }
           end
 
-          it 'stores secret in specified file' do
+          it 'stores the secret' do
             is_expected.to contain_file('/etc/marathon/.secret')
               .with_content('very-secret')
             is_expected.to contain_mesos__property(
@@ -46,10 +30,15 @@ describe 'marathon::config' do
           end
         end
 
-        context 'at default location, w/o principal set' do
-          let(:params) { {:mesos_auth_secret => 'very-secret'} }
+        describe 'when the auth principal is not set' do
+          let(:params) do
+            {
+              :mesos_auth_principal => :undef,
+              :mesos_auth_secret => 'very-secret'
+            }
+          end
 
-          it 'stores secret in specified file' do
+          it 'does not store the secret' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
             is_expected.not_to contain_mesos__property(
               'marathon_mesos_authentication_principal')
@@ -58,10 +47,15 @@ describe 'marathon::config' do
           end
         end
 
-        context 'at default location, w/o secret set' do
-          let(:params) { {:mesos_auth_principal => 'marathon'} }
+        describe 'when the auth secret is not set' do
+          let(:params) do
+            {
+              :mesos_auth_principal => 'principal',
+              :mesos_auth_secret => :undef
+            }
+          end
 
-          it 'stores secret in specified file' do
+          it 'does not store the secret' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
             is_expected.not_to contain_mesos__property(
               'marathon_mesos_authentication_principal')
@@ -70,7 +64,7 @@ describe 'marathon::config' do
           end
         end
 
-        context 'at specific location from params' do
+        describe 'when a custom secret file path is set' do
           let(:params) do
             {
               :mesos_auth_principal => 'marathon',
@@ -79,7 +73,7 @@ describe 'marathon::config' do
             }
           end
 
-          it 'stores secret in specified file' do
+          it 'stores the secret in the specified location' do
             is_expected.to contain_file('/root/.marathon_secret')
               .with_content('very-secret')
             is_expected.to contain_mesos__property(
@@ -90,9 +84,7 @@ describe 'marathon::config' do
       end
 
       context 'with default params' do
-        it { is_expected.to compile }
-
-        it 'creates conf dir' do
+        it 'creates config directories' do
           is_expected.to contain_file('/etc/marathon')
             .with_ensure('directory')
           is_expected.to contain_file('/etc/marathon/conf')
@@ -241,6 +233,34 @@ describe 'marathon::config' do
             is_expected.to contain_file('/etc/marathon/conf/?no-logger')
               .with_ensure('present')
           end
+        end
+      end
+
+      context 'master and zookeeper parameters' do
+        describe 'when master is set' do
+          let(:params) { {:master => '127.0.0.1'} }
+          it do
+            is_expected.to contain_mesos__property('marathon_master')
+              .with_value('127.0.0.1')
+          end
+        end
+
+        describe 'when master is not set' do
+          let(:params) { {:master => :undef} }
+          it { is_expected.not_to contain_mesos__property('marathon_master') }
+        end
+
+        describe 'when zookeeper is set' do
+          let(:params) { {:zookeeper => 'zk://127.0.0.1:2181/marathon'} }
+          it do
+            is_expected.to contain_mesos__property('marathon_zk')
+              .with_value('zk://127.0.0.1:2181/marathon')
+          end
+        end
+
+        describe 'when zookeeper is not set' do
+          let(:params) { {:zookeeper => :undef} }
+          it { is_expected.not_to contain_mesos__property('marathon_zk') }
         end
       end
     end
