@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe 'marathon::install' do
-  it { should compile }
+  it { is_expected.to compile }
 end
