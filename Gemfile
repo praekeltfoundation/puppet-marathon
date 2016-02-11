@@ -3,7 +3,11 @@ source 'https://rubygems.org'
 group :test do
   gem 'rake'
 
-  puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['>= 3.0.0','< 4.0']
+  puppetversion = if ENV['PUPPET_VERSION']
+                    ENV['PUPPET_VERSION'].to_s
+                  else
+                    ['>= 3.0.0', '< 4.0']
+                  end
   gem 'puppet', puppetversion
 
   gem 'librarian-puppet'
