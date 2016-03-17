@@ -263,6 +263,17 @@ describe 'marathon::config' do
           it { is_expected.not_to contain_mesos__property('marathon_zk') }
         end
       end
+
+      context 'configure marathon\'s logging levels' do
+        let(:params) {{
+            :log_levels => { 'mesosphere.chaos.http' => 'ERROR'}
+          }}
+        it 'appends setting to logback.xml' do
+          is_expected.to contain_file('/etc/marathon/logback.xml')
+            .with_content(/\<logger name="mesosphere.chaos.http" level="ERROR"\/\>/)
+        end
+      end
+
     end
   end
 end

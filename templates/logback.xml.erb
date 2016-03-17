@@ -21,5 +21,7 @@
   <root level="<%= @log_level %>">
     <appender-ref ref="FILE" />
   </root>
-
+  <% @log_levels.each do |key, level| -%>
+  <logger name="<%= key %>" level="<%= level %>"/>
+  <% end -%>
 </configuration>
