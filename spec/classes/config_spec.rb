@@ -265,15 +265,18 @@ describe 'marathon::config' do
       end
 
       context 'configure marathon\'s logging levels' do
-        let(:params) {{
-            :log_levels => { 'mesosphere.chaos.http' => 'ERROR'}
-          }}
+        let(:params) do
+          {
+            :log_levels => {'mesosphere.chaos.http' => 'ERROR'}
+          }
+        end
         it 'appends setting to logback.xml' do
           is_expected.to contain_file('/etc/marathon/logback.xml')
-            .with_content(/\<logger name="mesosphere.chaos.http" level="ERROR"\/\>/)
+            .with_content(
+              /\<logger name="mesosphere.chaos.http" level="ERROR"\/\>/
+            )
         end
       end
-
     end
   end
 end
