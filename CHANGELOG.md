@@ -1,3 +1,5 @@
+## 0.4.3 - UNRELEASED
+
 ## 0.4.2 - 2016/03/18
 ### Features
 * Log levels for individual loggers can be configured using the `log_levels` parameter (#21 - @felixb)
