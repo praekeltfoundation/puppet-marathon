@@ -15,6 +15,7 @@ class marathon::config(
   $log_dir                = '/var/log/marathon',
   $log_filename           = 'marathon.log',
   $log_level              = 'info',
+  $log_levels             = {},
   $ulimit                 = undef,
   $mesos_auth_principal   = undef,
   $mesos_auth_secret      = undef,
