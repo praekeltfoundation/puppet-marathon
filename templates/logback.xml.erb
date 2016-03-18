@@ -17,10 +17,9 @@
       <maxFileSize>10MB</maxFileSize>
     </triggeringPolicy>
   </appender>
-  <% @log_levels.each do |key, level| -%>
-  <logger name="<%= key %>" level="<%= level %>"/>
-  <% end %>
+
   <root level="<%= @log_level %>">
     <appender-ref ref="FILE" />
   </root>
+
 </configuration>

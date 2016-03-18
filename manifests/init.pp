@@ -47,11 +47,6 @@
 # [*log_dir*]
 #   The directory to store log files.
 #
-# [*log_levels*]
-#   A hash for configuring log levels like:
-#     {'mesosphere.chaos' => 'ERROR'}
-#   List of possible classes can be found at http://marathon/logging
-#
 # [*log_filename*]
 #   The name of the logfile to store in the log directory.
 #
@@ -100,7 +95,6 @@ class marathon(
   $logger                 = 'logback',
   $log_dir                = '/var/log/marathon',
   $log_filename           = 'marathon.log',
-  $log_levels             = {},
   $java_home              = undef,
   $java_opts              = '-Xmx512m',
   $ulimit                 = undef,
@@ -116,7 +110,6 @@ class marathon(
   validate_bool($manage_logger)
   validate_hash($options)
   validate_hash($env_var)
-  validate_hash($log_levels)
   if $ulimit != undef {
     validate_integer($ulimit)
   }
@@ -143,7 +136,6 @@ class marathon(
     logger                 => $logger,
     log_dir                => $log_dir,
     log_filename           => $log_filename,
-    log_levels             => $log_levels,
     java_home              => $java_home,
     java_opts              => $java_opts,
     ulimit                 => $ulimit,
