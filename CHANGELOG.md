@@ -1,3 +1,7 @@
+## 0.4.2 - 2016/03/18
+### Features
+* Log levels for individual loggers can be configured using the `log_levels` parameter (#21 - @felixb)
+
 ## 0.4.1 - 2016/02/11
 ### Features
 * Puppet 4.x support (#18)
