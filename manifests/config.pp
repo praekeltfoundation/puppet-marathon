@@ -73,7 +73,7 @@ class marathon::config(
   }
   
  if $reporter_graphite {
-    file {'/etc/marathon/conf/reporter_graphite':
+    file {"${conf_dir_base}/${conf_dir_name}/reporter_graphite":
       ensure  => present,
       content => $reporter_graphite,
       owner   => $owner,
