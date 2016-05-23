@@ -62,3 +62,14 @@ Like any good Java program (technically, Scala), Marathon uses loggers that are 
 To disable the configuration of logging (enabled by default), pass `manage_logger => false`. Even with management of loggers enabled Marathon will still output to syslog (although this depends on exactly how Marathon is launched).
 
 **NOTE:** At this time, the logging configuration only works for versions 0.13.0+ of Marathon. Marathon recently switched from `log4j` to `slf4j` + `logback`. This module only includes a configuration file [template for `logback`](templates/logback.xml.erb).
+
+## Marathon Monitoring
+Marathon have been integration with Graphite, report metrics to Graphite as defined by the given URL. Example: tcp://localhost:2003?prefix=marathon-test&interval=10 
+
+For example:
+```puppet
+class { 'marathon'
+  reporter_graphite => 'tcp://localhost:2003?prefix=marathon-test&interval=10'
+  }
+```
+
