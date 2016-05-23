@@ -60,6 +60,26 @@ class marathon::config(
       group   => $group,
     }
   }
+  
+  if $master {
+    mesos::property { 'marathon_master':
+      value   => $master,
+      dir     => $conf_dir,
+      file    => 'master',
+      service => undef,
+      owner   => $owner,
+      group   => $group,
+    }
+  }
+  
+ if $reporter_graphite {
+    file {'/etc/marathon/conf/reporter_graphite':
+      ensure  => present,
+      content => $reporter_graphite,
+      owner   => $owner,
+      group   => $group,
+    }
+  }
 
   if $zookeeper {
     mesos::property { 'marathon_zk':
