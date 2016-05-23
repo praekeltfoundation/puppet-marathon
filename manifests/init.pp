@@ -106,6 +106,7 @@ class marathon(
   $ulimit                 = undef,
   $mesos_auth_principal   = undef,
   $mesos_auth_secret      = undef,
+  $reporter_graphite      = undef,
   $mesos_auth_secret_file = '/etc/marathon/.secret',
 
   $service_manage         = true,
