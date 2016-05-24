@@ -82,7 +82,11 @@ describe 'marathon::config' do
           end
         end
       end
-
+      
+      context 'with reporter_graphite => true' do
+        is_expected.to contain_file('/etc/marathon/conf/reporter_graphite').with_ensure('present') 
+      end
+      
       context 'with default params' do
         it 'creates config directories' do
           is_expected.to contain_file('/etc/marathon')
