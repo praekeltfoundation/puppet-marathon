@@ -61,18 +61,7 @@ class marathon::config(
       group   => $group,
     }
   }
-  
-  if $master {
-    mesos::property { 'marathon_master':
-      value   => $master,
-      dir     => $conf_dir,
-      file    => 'master',
-      service => undef,
-      owner   => $owner,
-      group   => $group,
-    }
-  }
-  
+
   if $reporter_graphite {
     file {"${conf_dir_base}/${conf_dir_name}/reporter_graphite":
       ensure  => present,
