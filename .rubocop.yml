@@ -18,3 +18,7 @@ Style/TrailingCommaInLiteral:
 
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+# This check errors out on Ruby 1.9.3 on Travis for some reason :-/
+Style/WordArray:
+  Enabled: false
