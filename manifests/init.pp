@@ -83,6 +83,10 @@
 #
 # [*service_ensure*]
 #   What state the service should be kept in - e.g. 'running'
+#
+# [*force_provider]
+# Service provider override, eg: upstart
+
 class marathon(
   $repo_manage            = true,
   $repo_source            = 'mesosphere',
@@ -109,7 +113,9 @@ class marathon(
   $mesos_auth_secret_file = '/etc/marathon/.secret',
 
   $service_manage         = true,
-  $service_ensure         = 'running'
+  $service_ensure         = 'running',
+
+  $force_provider         = undef
 ) {
 
   validate_bool($repo_manage)
@@ -153,8 +159,9 @@ class marathon(
   }
 
   class { 'marathon::service':
-    ensure => $service_ensure,
-    manage => $service_manage,
+    ensure         => $service_ensure,
+    manage         => $service_manage,
+    force_provider => $force_provider,
   }
 
   anchor { 'marathon::begin': }
