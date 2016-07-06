@@ -9,12 +9,12 @@ AllCops:
 Style/HashSyntax:
   EnforcedStyle: hash_rockets
 
-Style/RegexpLiteral:
-  # EnforcedStyle: slashes # Doesn't seem to work :'(
-  Enabled: false
-
 Style/TrailingCommaInLiteral:
   Enabled: false
 
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+# This check errors out on Ruby 1.9.3 on Travis for some reason :-/
+Style/WordArray:
+  Enabled: false

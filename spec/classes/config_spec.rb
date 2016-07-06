@@ -22,11 +22,11 @@ describe 'marathon::config' do
             is_expected.to contain_file('/etc/marathon/.secret')
               .with_content('very-secret')
             is_expected.to contain_mesos__property(
-              'marathon_mesos_authentication_principal')
-              .with_value('marathon')
+              'marathon_mesos_authentication_principal'
+            ).with_value('marathon')
             is_expected.to contain_mesos__property(
-              'marathon_mesos_authentication_secret_file')
-              .with_value('/etc/marathon/.secret')
+              'marathon_mesos_authentication_secret_file'
+            ).with_value('/etc/marathon/.secret')
           end
         end
 
@@ -41,9 +41,11 @@ describe 'marathon::config' do
           it 'does not store the secret' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
             is_expected.not_to contain_mesos__property(
-              'marathon_mesos_authentication_principal')
+              'marathon_mesos_authentication_principal'
+            )
             is_expected.not_to contain_mesos__property(
-              'marathon_mesos_authentication_secret_file')
+              'marathon_mesos_authentication_secret_file'
+            )
           end
         end
 
@@ -58,9 +60,11 @@ describe 'marathon::config' do
           it 'does not store the secret' do
             is_expected.not_to contain_file('/etc/marathon/.secret')
             is_expected.not_to contain_mesos__property(
-              'marathon_mesos_authentication_principal')
+              'marathon_mesos_authentication_principal'
+            )
             is_expected.not_to contain_mesos__property(
-              'marathon_mesos_authentication_secret_file')
+              'marathon_mesos_authentication_secret_file'
+            )
           end
         end
 
@@ -77,8 +81,8 @@ describe 'marathon::config' do
             is_expected.to contain_file('/root/.marathon_secret')
               .with_content('very-secret')
             is_expected.to contain_mesos__property(
-              'marathon_mesos_authentication_secret_file')
-              .with_value('/root/.marathon_secret')
+              'marathon_mesos_authentication_secret_file'
+            ).with_value('/root/.marathon_secret')
           end
         end
       end
@@ -95,7 +99,7 @@ describe 'marathon::config' do
           is_expected.to contain_file('/var/log/marathon')
             .with_ensure('directory')
           is_expected.to contain_file('/etc/marathon/logback.xml')
-            .with_content(/<file>\/var\/log\/marathon\/marathon.log<\/file>/)
+            .with_content(%r{<file>/var/log/marathon/marathon.log</file>})
         end
 
         case facts[:osfamily]
@@ -186,7 +190,7 @@ describe 'marathon::config' do
             is_expected.to contain_file('/etc/default/marathon')
               .with_content(/^ulimit -n 9001$/)
               .with_content(/^JAVA_OPTS="-Xmx1024m #{logback_opt}"$/)
-              .with_content(/^JAVA_HOME="\/opt\/some\/java\/home"$/)
+              .with_content(%r{^JAVA_HOME="/opt/some/java/home"$})
               .with_content(/^export foo="bar"$/)
               .with_content(/^export f00="b4r"$/)
           end
@@ -207,7 +211,7 @@ describe 'marathon::config' do
               '-Dlogback.configurationFile=file:/etc/marathon/logback.xml'
             is_expected.to contain_file('/etc/sysconfig/marathon')
               .with_content(/^JAVA_OPTS=-Xmx1024m #{logback_opt}$/)
-              .with_content(/^JAVA_HOME=\/opt\/some\/java\/home$/)
+              .with_content(%r{^JAVA_HOME=/opt/some/java/home$})
               .with_content(/^foo=bar$/)
               .with_content(/^f00=b4r$/)
 
@@ -273,7 +277,7 @@ describe 'marathon::config' do
         it 'appends setting to logback.xml' do
           is_expected.to contain_file('/etc/marathon/logback.xml')
             .with_content(
-              /\<logger name="mesosphere.chaos.http" level="ERROR"\/\>/
+              %r{\<logger name="mesosphere.chaos.http" level="ERROR"/\>}
             )
         end
       end

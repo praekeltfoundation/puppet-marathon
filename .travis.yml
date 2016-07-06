@@ -7,9 +7,20 @@ cache:
 env:
   global:
     - LIBRARIAN_PUPPET_TMP="$HOME/librarian-puppet"
-  matrix:
-    - PUPPET_VERSION="3.4.3"    # Version installed on Trusty
-    - PUPPET_VERSION="~> 3.8.0" # Latest 3.x version
-    - PUPPET_VERSION="~> 4.3.0" # Latest 4.x version
+matrix:
+  include:
+    # Puppet 3.4.3 in the standard repos for Ubuntu 14.04
+    - rvm: 1.9.3
+      env: PUPPET_VERSION="3.4.3"
+    # Puppetlabs ("vanilla") release tracks latest 3.x version
+    - rvm: 1.9.3
+      env: PUPPET_VERSION="~> 3"
+    # Puppetlabs PC1 release bundles it's own Ruby 2.1 and tracks Puppet 4.x
+    - rvm: 2.1.9
+      env: PUPPET_VERSION="~> 4"  # Latest 4.x version
 
-script: bundle exec rake test
+before_install:
+  - gem install bundler
+
+script:
+  - bundle exec rake test

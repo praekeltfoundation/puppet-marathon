@@ -8,10 +8,11 @@ group :test do
 
   gem 'librarian-puppet'
   gem 'metadata-json-lint'
-  gem 'puppetlabs_spec_helper'
+  gem 'puppetlabs_spec_helper', '~> 1.1.1'
   gem 'rspec-puppet-facts'
 
-  gem 'rubocop', '~> 0.37.0'
-  # On certain setups, rubocop seems to crash without this gem :-/
-  gem 'safe_yaml', '~> 1.0.0'
+  gem 'rubocop', '~> 0.41.1'
+
+  # json 2.0.0 gem dropped support for Ruby < 2.0
+  gem 'json', '< 2.0.0' if RUBY_VERSION < '2.0'
 end
