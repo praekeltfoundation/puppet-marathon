@@ -15,3 +15,6 @@ Puppetfile.lock
 
 # Puppet
 /pkg/
+
+# IDE
+.idea/
