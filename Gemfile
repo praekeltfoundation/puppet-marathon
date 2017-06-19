@@ -7,7 +7,10 @@ group :test do
   gem 'puppet', puppetversion
 
   gem 'librarian-puppet'
-  gem 'metadata-json-lint'
+
+  # metadata-json-lint 1.0.0 gem dropped support for Ruby < 2.0
+  gem 'metadata-json-lint', RUBY_VERSION < '2.0' ? '< 1.0.0' : '>= 0'
+
   gem 'puppetlabs_spec_helper', '~> 1.1.1'
   gem 'rspec-puppet-facts'
 
