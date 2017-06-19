@@ -16,6 +16,7 @@ class marathon::config(
   $log_filename           = 'marathon.log',
   $log_level              = 'info',
   $log_levels             = {},
+  $log_appender_pattern   = '%-4relative [%thread] %-5level %logger{35} - %msg %n',
   $ulimit                 = undef,
   $mesos_auth_principal   = undef,
   $mesos_auth_secret      = undef,
