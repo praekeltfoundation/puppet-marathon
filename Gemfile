@@ -9,11 +9,7 @@ group :test do
   gem 'librarian-puppet'
 
   # metadata-json-lint 1.0.0 gem dropped support for Ruby < 2.0
-  metadata_json_lint_version = '>= 0'
-  if RUBY_VERSION < '2.0'
-    metadata_json_lint_version = '< 1.0.0'
-  end
-  gem 'metadata-json-lint', metadata_json_lint_version
+  gem 'metadata-json-lint', RUBY_VERSION < '2.0' ? '< 1.0.0' : '>= 0'
 
   gem 'puppetlabs_spec_helper', '~> 1.1.1'
   gem 'rspec-puppet-facts'
