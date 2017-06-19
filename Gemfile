@@ -7,7 +7,10 @@ group :test do
   gem 'puppet', puppetversion
 
   gem 'librarian-puppet'
-  gem 'metadata-json-lint'
+  # A certain version of metadata-json-lint added a check for unbounded version
+  # requirements of dependencies. We do this now, but I can't figure out which
+  # version added the check, so just pin to a known-good version.
+  gem 'metadata-json-lint', '~> 1.2.2'
   gem 'puppetlabs_spec_helper', '~> 1.1.1'
   gem 'rspec-puppet-facts'
 
