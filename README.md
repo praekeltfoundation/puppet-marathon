@@ -1,3 +1,5 @@
+> **DEPRECATION NOTICE**: This Puppet module is no longer maintained and should not be used. We now use [Mesosphere DC/OS](https://dcos.io) instead of using Marathon directly.
+
 # puppet-marathon
 
 [![Puppet

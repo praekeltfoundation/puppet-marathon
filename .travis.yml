@@ -9,12 +9,6 @@ env:
     - LIBRARIAN_PUPPET_TMP="$HOME/librarian-puppet"
 matrix:
   include:
-    # Puppet 3.4.3 in the standard repos for Ubuntu 14.04
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="3.4.3"
-    # Puppetlabs ("vanilla") release tracks latest 3.x version
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="~> 3"
     # Puppetlabs PC1 release bundles it's own Ruby 2.1 and tracks Puppet 4.x
     - rvm: 2.1.9
       env: PUPPET_VERSION="~> 4"  # Latest 4.x version
