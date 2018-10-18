@@ -22,6 +22,7 @@ class marathon::config(
   $mesos_auth_secret_file = '/etc/marathon/.secret',
   $java_home              = undef,
   $java_opts              = '-Xmx512m',
+  $reporter_graphite      = $marathon::reporter_graphite,
 ) {
   $conf_dir = "${conf_dir_base}/${conf_dir_name}"
   file { [$conf_dir_base, $conf_dir]:
@@ -56,6 +57,15 @@ class marathon::config(
       dir     => $conf_dir,
       file    => 'master',
       service => undef,
+      owner   => $owner,
+      group   => $group,
+    }
+  }
+
+  if $reporter_graphite {
+    file {"${conf_dir_base}/${conf_dir_name}/reporter_graphite":
+      ensure  => present,
+      content => $reporter_graphite,
       owner   => $owner,
       group   => $group,
     }
